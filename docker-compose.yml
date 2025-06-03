@@ -10,11 +10,6 @@ services:
     container_name: postgres-db
     restart: always
     environment:
-      # Database configuration (load from .env file)
-      # Example values (DO NOT USE IN PRODUCTION):
-      # POSTGRES_DB=mydb
-      # POSTGRES_USER=myuser
-      # POSTGRES_PASSWORD=mypassword
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
