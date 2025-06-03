@@ -1,0 +1,49 @@
+# Docker Compose configuration for the Authentication System
+# This file defines the services needed to run the application:
+# - PostgreSQL database
+# - FastAPI backend
+
+services:
+  # PostgreSQL Database Service
+  db:
+    image: postgres:17
+    container_name: postgres-db
+    restart: always
+    environment:
+      # Database configuration (load from .env file)
+      # Example values (DO NOT USE IN PRODUCTION):
+      # POSTGRES_DB=mydb
+      # POSTGRES_USER=myuser
+      # POSTGRES_PASSWORD=mypassword
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      # Map container port to host port (load from .env)
+      # Example: "5432:5432"
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      # Persistent storage for database data
+      - pgdata:/var/lib/postgresql/data
+
+  # FastAPI Backend Service
+  backend:
+    build: ./backend
+    container_name: fastapi-backend
+    restart: always
+    # Load environment variables from .env file
+    env_file:
+      - .env
+    ports:
+      # Map container port to host port
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      # Mount backend code for development
+      - ./backend:/app
+
+# Define named volumes
+volumes:
+  # Persistent volume for PostgreSQL data
+  pgdata:
